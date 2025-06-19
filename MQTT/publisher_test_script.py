@@ -7,8 +7,8 @@ import json
 
 # MQTT Configuration
 MQTT_CONFIG = {
-    "server": b"51.21.239.39",
-    "port": 1883,
+    "server": b"mosquitto.local",
+    "port": 8883,
     "username": b"iotuser",
     "password": b"iotuser2025",
 }
@@ -54,6 +54,7 @@ SAMPLE_DATA = {
         'Pico_ID': PICO_ID,
         'Movesense_series': '174630000192',
         'Timestamp_UTC': int(time.time()),
+        'Timestamp_ms': 30348,
         'average_bpm': 108.7813
     },
     "sensors/gnss": {
@@ -61,7 +62,9 @@ SAMPLE_DATA = {
         'GNSS_ID': 'device123',
         'Date': datetime.now().isoformat(),
         'Latitude': 37.7749 + random.uniform(-0.01, 0.01),
-        'Longitude': -122.4194 + random.uniform(-0.01, 0.01)
+        'Longitude': -122.4194 + random.uniform(-0.01, 0.01),
+        'Timestamp_UTC': int(time.time()),
+        'Timestamp_ms': 30348,
     },
     "sensors/ecg": {
         'Pico_ID': PICO_ID,
@@ -82,7 +85,8 @@ def on_connect(client, userdata, flags, rc):
 
 # Create MQTT client
 client = mqtt.Client()
-client.username_pw_set(MQTT_CONFIG["username"].decode(), MQTT_CONFIG["password"].decode())
+#client.username_pw_set(MQTT_CONFIG["username"].decode(), MQTT_CONFIG["password"].decode())
+client.tls_set("../resources/mosquitto_ca.crt")
 
 # Assign callbacks
 client.on_connect = on_connect

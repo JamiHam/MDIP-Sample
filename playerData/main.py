@@ -1,6 +1,6 @@
 from db_manager import DatabaseManager
 from player import Player
-from MQTT.publisher import hr_data
+#from MQTT.publisher import hr_data
 
 
 if __name__ == "__main__":

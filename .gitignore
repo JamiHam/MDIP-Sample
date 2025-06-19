@@ -176,3 +176,5 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 /telegraf/telegraf_keys.env
+
+/resources/mosquitto_ca.crt

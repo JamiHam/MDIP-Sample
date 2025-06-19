@@ -53,17 +53,18 @@ def python_dict_to_json(python_dict_string):
         return f"Error converting to JSON: {str(e)}"
 
 # Load environment variables for InfluxDB credentials
-KEY_PATH = r"..\keys\keys.env"
-load_dotenv(KEY_PATH)
+#KEY_PATH = r"..\keys\keys.env"
+#load_dotenv(KEY_PATH)
+load_dotenv()
 
 token = os.getenv("ALL_ACCESS_TOKEN")
 if not token:
     raise ValueError("Environment variable ALL_ACCESS_TOKEN is not set.")
 
 # InfluxDB Configuration
-org = "MDIP-Sample"
-host = "https://eu-central-1-1.aws.cloud2.influxdata.com"
-database = "Full_Player_Data"
+org = "fivegsport"
+host = "http://192.168.50.172:8086"
+database = "iot_data"
 
 
 # Setting up all the measurements for the data to be logged in influx
@@ -98,8 +99,8 @@ class MQTTSubscriber:
             self.mqtt_client_id = f"sensor-subscriber-XXXX"
         else:
             # MQTT Configuration on Local
-            self.mqtt_broker = b"51.21.239.39"
-            self.mqtt_port = 1883
+            self.mqtt_broker = b"mosquitto.local"
+            self.mqtt_port = 8883
             self.mqtt_username = b"iotuser"
             self.mqtt_password = b"iotuser2025"
             self.mqtt_client_id = f"sensor-subscriber-XXXX"
@@ -123,6 +124,7 @@ class MQTTSubscriber:
                 print(f"Initializing custom MQTT client...")
                 self.mqtt_client = mqtt.Client()
                 self.mqtt_client.username_pw_set(self.mqtt_username.decode(), self.mqtt_password.decode())
+                self.mqtt_client.tls_set('resources/mosquitto_ca.crt')
         except ConnectionError as e:
             print(f"ERROR: Unable to connect MQTT, reason: {e}")
 
